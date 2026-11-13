@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    name: Build & Test (${{ matrix.compiler }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [g++, clang++]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install LLVM/Clang Toolchain
+        if: matrix.compiler == 'clang++'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang llvm
+
+      - name: Build & Run Verification Suite
+        run: |
+          make CXX=${{ matrix.compiler }} clean all test
+
+      - name: Verify CLI Subcommands
+        run: |
+          ./bin/lh-trt-zerocopy --version
+          ./bin/lh-trt-zerocopy --help
+          ./bin/lh-trt-zerocopy scan fixtures/hardened_zerocopy_policy.json --format table
+          ./bin/lh-trt-zerocopy scan fixtures/hardened_zerocopy_policy.json --format json
+          ./bin/lh-trt-zerocopy scan fixtures/hardened_zerocopy_policy.json --format sarif
+          ./bin/lh-trt-zerocopy calc-layout --width 1920 --height 1080 --fps 60
+          ./bin/lh-trt-zerocopy sim-pipeline fixtures/sample_nv12_frame.json
+          ./bin/lh-trt-zerocopy convert-frame fixtures/sample_nv12_frame.json --format json
+
+      - name: Verify Vulnerable Posture Exit Code
+        run: |
+          set +e
+          ./bin/lh-trt-zerocopy scan fixtures/vulnerable_zerocopy_policy.json --format table
+          EXIT_CODE=$?
+          set -e
+          if [ $EXIT_CODE -ne 1 ]; then
+            echo "Expected exit code 1 for vulnerable policy, got $EXIT_CODE"
+            exit 1
+          fi
+          echo "Vulnerable policy correctly exited with code 1."

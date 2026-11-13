@@ -1,0 +1,19 @@
+# Build outputs and binaries
+bin/
+build/
+tests/test_runner
+dist/
+
+# Object files and libraries
+*.o
+*.a
+*.so
+
+# TensorRT serialized plans and dumps
+*.plan
+*.engine
+*.bin
+*.tar.gz
+*.swp
+*~
+.DS_Store

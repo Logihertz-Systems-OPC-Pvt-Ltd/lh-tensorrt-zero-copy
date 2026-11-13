@@ -1,0 +1,8 @@
+Logihertz V4L2-to-TensorRT Zero-Copy DMA Allocator (lh-tensorrt-zero-copy)
+Copyright 2026 Logihertz Systems (OPC) Private Limited
+
+This product includes software developed by Logihertz Systems (OPC) Private Limited
+and individual contributors.
+
+Author: Sameer Tawade <ops@logihertz.com>
+Homepage: https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-tensorrt-zero-copy
