@@ -1,0 +1,9 @@
+Package: lh-tensorrt-zero-copy
+Version: 0.1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: Sameer Tawade <ops@logihertz.com>
+Homepage: https://www.logihertz.com
+Description: lh-trt-zerocopy - Hardware Pitch Alignment & SMMU Page Floor Invariant
+ C++17 V4L2-to-TensorRT zero-copy DMA-BUF shared memory allocator enforcing 256-byte pitch & 4KB SMMU page alignment, lock-free capture-to-inference syncpoint fences, and BT.709 NV12-to-NCHW tensor conversion.
